@@ -5,6 +5,19 @@ def releaseTime(){
     def formattedDate = date.format('yyyy_MM_dd_HHmm')
     return formattedDate
 }
+//定义apk存放路径
+ext.appReleaseDir = ""
+
+def loadProperties() {
+    def proFile = file("../local.properties")
+    Properties p = new Properties()
+    proFile.withInputStream { stream->
+        p.load(stream)
+    }
+    appReleaseDir = p.appReleaseDir
+}
+
+loadProperties()
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -28,12 +41,24 @@ android {
         }
     }
 
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            //修改apk名称variant.name对应flavor.name+buildType.name
-            outputFileName = "${variant.name}-${project.archivesBaseName}-${variant.versionCode}-${variant.versionName}-${releaseTime()}.apk"
+//    android.applicationVariants.all { variant ->
+//        variant.outputs.all {
+//            //修改apk名称variant.name对应flavor.name+buildType.name
+//            outputFileName = "${variant.name}-${project.archivesBaseName}-${variant.versionCode}-${variant.versionName}-${releaseTime()}.apk"
+//        }
+//    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {output ->
+                //这个修改输出的APK路径 （路径不能是盘符根目录例如F：\\，要指定一个文件夹）
+                variant.getPackageApplication().outputDirectory = new File(appReleaseDir+ '/'+variant.buildType.name)
+                variant.getPackageApplication().outputScope.apkDatas.forEach { apkData ->
+                    //这个修改输出APK的文件名
+                    apkData.outputFileName ="${variant.name}-${project.archivesBaseName}-${variant.versionCode}-${variant.versionName}-${releaseTime()}.apk"
+                }
         }
     }
+
 
     flavorDimensions("default")
     productFlavors{
