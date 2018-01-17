@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GradeConfigDmo.iml" filepath="$PROJECT_DIR$/GradeConfigDmo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GradleConfigDemo.iml" filepath="$PROJECT_DIR$/GradleConfigDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
