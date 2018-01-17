@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+
+def releaseTime(){
+    def date = new Date()
+    def formattedDate = date.format('yyyy_MM_dd_HHmm')
+    return formattedDate
+}
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    defaultConfig {
+        applicationId "com.ha.cjy.gradeconfigdmo"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["AndroidJUnit"]
+        vectorDrawables.useSupportLibrary = true
+        archivesBaseName = "GradleConfigDemo"
+    }
+
+    signingConfigs {
+        config{
+            storeFile file('D:/workspace/keystore.jks')
+            keyAlias 'androidKeystore'
+            keyPassword 'android'
+            storePassword 'android'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            //修改apk名称variant.name对应flavor.name+buildType.name
+            outputFileName = "${variant.name}-${project.archivesBaseName}-${variant.versionCode}-${variant.versionName}-${releaseTime()}.apk"
+        }
+    }
+
+    flavorDimensions("default")
+    productFlavors{
+        xiaomi{dimension "default"}
+        huawei{dimension "default"}
+        baidu{dimension "default"}
+    }
+    productFlavors.all{
+        flavor->flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE:name]
+    }
+
+    buildTypes {
+        debug{
+            minifyEnabled false
+            //配置api地址,在BuildConfig可以找到该字段
+            buildConfigField ("String", "API_URL", "\"http://debug.com\"")
+            signingConfig signingConfigs.config
+        }
+
+        release {
+            minifyEnabled true
+            //配置api地址,在BuildConfig可以找到该字段
+            buildConfigField("String","API_URL","\"http://release.com\"")
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.dependencies["appcompat-v7"]
+    implementation rootProject.ext.dependencies["design"]
+    implementation rootProject.ext.dependencies["constraint-layout"]
+    implementation rootProject.ext.dependencies["vector-drawable"]
+    testImplementation rootProject.ext.dependencies["junit"]
+    androidTestImplementation rootProject.ext.dependencies["test-runner"]
+    androidTestImplementation rootProject.ext.dependencies["test-espresso"]
+
+    implementation rootProject.ext.dependencies["umeng-common"]
+    implementation rootProject.ext.dependencies["umeng-analytics"]
+}

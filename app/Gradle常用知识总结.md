@@ -1,5 +1,3 @@
-# GradleConfigDemo
-
 **基于Android Studio3.0**
 
 **1、依赖库的统一管理配置**
@@ -21,7 +19,7 @@ signingConfigs {
     }
 ```
 当然不喜欢手动写的话，也可以设置**自动生成：Project Structure->app->Signing添加一个签名即可**。
-Generate Signed Apk这种方式生产的apk是放在app同级对应的release/debug目录下。当然，如果使用gradle的命令去打包，生成的apk是存放在app->build-output-apk目录下。
+Generate Signed Apk这种方式生产的apk是放在app目录下对应的release/debug目录下。当然，如果使用gradle的命令去打包，生成的apk是存放在app->build-output-apk目录下。
 
 **3、修改打包出的apk名称**
 **studio3.0 gradle api有变动**，具体请看：https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration.html#variant_api
