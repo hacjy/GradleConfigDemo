@@ -54,7 +54,7 @@ android {
                 variant.getPackageApplication().outputDirectory = new File(appReleaseDir+ '/'+variant.buildType.name)
                 variant.getPackageApplication().outputScope.apkDatas.forEach { apkData ->
                     //这个修改输出APK的文件名
-                    apkData.outputFileName ="${variant.name}-${project.archivesBaseName}-${variant.versionCode}-${variant.versionName}.apk"
+                    apkData.outputFileName ="${project.archivesBaseName}.apk"
                 }
         }
     }
